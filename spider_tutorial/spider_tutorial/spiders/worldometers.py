@@ -32,4 +32,19 @@ class WorldometersSpider(scrapy.Spider):
             
             
             # relative url
-            yield response.follow(url=link)
+            # yield response.follow(url=link)
+            
+            
+            # scraping dta from multiple links
+            yield response.follow(url=link, callback=self.parse_country)
+            
+    def parse_country(self, response):
+        rows = response.xpath("(//table[contains(@class, 'table')])[1]/tbody/tr")
+        for row in rows:
+            year = row.xpath(".//td[1]/text()").get()
+            population = row.xpath(".//td[2]/text()").get()
+            
+            yield {
+                'year': year,
+                'population': population,
+            }
