@@ -29,3 +29,7 @@ class WorldometersSpider(scrapy.Spider):
             # or
             # absolute_url = response.urljoin(link)
             # yield scrapy.Request(url=absolute_url)
+            
+            
+            # relative url
+            yield response.follow(url=link)
