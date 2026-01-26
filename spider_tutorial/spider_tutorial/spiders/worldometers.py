@@ -25,5 +25,7 @@ class WorldometersSpider(scrapy.Spider):
             
             
             # absolute url
-            absolute_url = f'https://www.worldometers.info/{link}'
-            yield scrapy.Request(url=absolute_url)
+            # absolute_url = f'https://www.worldometers.info/{link}'
+            # or
+            # absolute_url = response.urljoin(link)
+            # yield scrapy.Request(url=absolute_url)
