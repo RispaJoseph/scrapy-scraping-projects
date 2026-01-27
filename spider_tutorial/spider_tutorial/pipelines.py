@@ -7,7 +7,18 @@
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 
-
-class SpiderTutorialPipeline:
+import logging
+import pymongo
+class MongodbPipeline:
+    collection_name = 'transcripts'
+    
+    def open_spider(self, spider):
+        self.client = pymongo.MongoClient("mongodb+srv://rizpahjoseph_db_user:NcfuAEJWDNo1hNGR@cluster0.5m6invw.mongodb.net/?appName=Cluster0")
+        self.db = self.client['My_Database']
+        
+    def close_spider(self, spider):
+        self.client.close()
+    
     def process_item(self, item, spider):
+        self.db[self.collection_name].insert_one(dict(item))
         return item
