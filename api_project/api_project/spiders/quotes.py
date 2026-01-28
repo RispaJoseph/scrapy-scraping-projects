@@ -16,3 +16,10 @@ class QuotesSpider(scrapy.Spider):
                 'tags': quote.get('tags'),
                 'quotes': quote.get('text'),
             }
+        has_next = json_response.get('has_next')
+        if has_next:
+            next_page = json_response.get('page')+1
+            yield scrapy.Request(
+                url = f'https://quotes.toscrape.com/api/quotes?page={next_page}',
+                callback= self.parse
+            )
