@@ -1,0 +1,20 @@
+# www.amazon.com - splash code testing to scrap books searching on amazon
+
+function main(splash, args)
+  url = args.url
+  assert(splash:go(url))
+  assert(splash:wait(1))
+  
+  input_box = assert(splash:select("#twotabsearchtextbox"))
+  input_box:focus()
+  input_box:send_text("books")
+  assert(splash:wait(2))
+  
+  button = assert(splash:select("#nav-search-submit-button"))
+  button:mouse_click()
+  assert(splash:wait(4))
+  return {
+    png = splash:png(),
+    html = splash:html()
+  }
+end
