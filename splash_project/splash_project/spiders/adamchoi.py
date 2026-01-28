@@ -20,7 +20,22 @@ class AdamchoiSpider(scrapy.Spider):
     '''
     
     def start_requests(self):
-        yield SplashRequest(url='https://www.adamchoi.co.uk/overs/detailed', callback=self.parse, endpoint='execute', args={'lua_source':self.script})
+        yield SplashRequest(url='https://www.adamchoi.co.uk/overs/detailed', callback=self.parse, endpoint="render.html", args={"wait": 3})
 
     def parse(self, response):
-        print(response.body)
+        rows = response.xpath('//tr')[1:20]
+        
+        for row in rows:
+            date = row.xpath('./td[1]/text()').get()
+            home_team = row.xpath('./td[2]/text()').get()
+            score = row.xpath('./td[3]/text()').get()
+            away_team = row.xpath('./td[4]/text()').get()
+            yield{
+                'date': date,
+                'home_team': home_team,
+                'score': score,
+                'away_team': away_team
+            }
+
+# docker ---> docker run -it -p 8050:8050 scrapinghub/splash
+# To run ---> scrapy crawl adamchoi -o football_data.json
